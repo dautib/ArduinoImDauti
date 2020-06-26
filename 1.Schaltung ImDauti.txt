@@ -1,0 +1,61 @@
+// KFZ-Ampel
+int kfz_rot   = 12;            // Pin-Nr. der roten KFZ-LED
+int kfz_gelb  = 11;            // Pin-Nr. der gelben KFZ-LED
+int kfz_gruen = 10;            // Pin-Nr. der gruenen KFZ-LED
+
+// Fussgaenger-Ampel
+int fg_rot    = 9;             // Pin-Nr. der roten Fussgaenger-LED
+int fg_gruen  = 8;             // Pin-Nr. der gruenen Fussgaenger-LED
+
+// Taste
+int taste     = 2;             // Pin-Nr. Taster
+int taste_led = 7;             // Pin-Nr. der Taster-LED
+
+void setup() {
+  pinMode(kfz_rot, OUTPUT);
+  pinMode(kfz_gelb, OUTPUT);
+  pinMode(kfz_gruen, OUTPUT);
+
+  pinMode(fg_rot, OUTPUT);
+  pinMode(fg_gruen, OUTPUT);
+  
+  pinMode(taste, INPUT_PULLUP);
+  pinMode(taste_led, OUTPUT);
+}
+
+void loop() {
+  //KFZ-Ampel auf Gruen schalten
+  digitalWrite(kfz_rot, LOW);
+  digitalWrite(kfz_gelb, LOW);
+  digitalWrite(kfz_gruen, HIGH);
+  
+  //Fussgaengerampel auf Rot schalten
+  digitalWrite(fg_gruen, LOW);
+  digitalWrite(fg_rot, HIGH);
+      
+  if(digitalRead(taste) == LOW){
+    //Signalgeber Fussgaengerschaltung aktiviert
+    for(int i=0; i<5; i++){
+      digitalWrite(taste_led, HIGH);
+      delay(500);
+      digitalWrite(taste_led, LOW);
+      delay(500);
+    }
+    //KFZ-Ampel auf Rot schalten
+    digitalWrite(kfz_gruen, LOW);
+    digitalWrite(kfz_gelb, HIGH);
+    delay(2000);
+    digitalWrite(kfz_gelb, LOW);
+    digitalWrite(kfz_rot, HIGH);
+    delay(2000);
+    //Fussgaengerampel auf Gruen schalten
+    digitalWrite(fg_rot, LOW);
+    digitalWrite(fg_gruen, HIGH);
+    delay(10000);
+    //Phasenwechsel ankuendigen
+    digitalWrite(fg_gruen, LOW);
+    digitalWrite(kfz_gelb, HIGH);
+    digitalWrite(fg_rot, HIGH);
+    delay(2000);
+   }
+}
