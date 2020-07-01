@@ -1,27 +1,29 @@
 #include <LiquidCrystal.h>
 #include <Keypad.h>
  
-LiquidCrystal lcd(13, 12, 11, 10, 9, 8);  // setting the expander address, number of lcd columns, number of lcd rows
-
-long first = 0;
-long second = 0;
+LiquidCrystal lcd(13, 12, 11, 10, 9, 8);  
+// Initialisierung Variabeln
+long erste = 0;
+long zweite = 0;
 double total = 0;
 int posit = 0 ;
-char customKey;
-const byte ROWS = 4;
-const byte COLS = 4;
+char zeichen;
+const byte REIHEN = 4;
+const byte SPALTEN = 4;
 
-char keys[ROWS][COLS] = { // define keypad equivalents
+// Buttons zu Zeichen zuteilen
+char zahlen[REIHEN][SPALTEN] = { 
   {'1','2','3','/'},
   {'4','5','6','*'},
   {'7','8','9','-'},
   {'C','0','=','+'}
 };
-byte rowPins[ROWS] = {7 ,6 ,5 ,4}; // connect rows from keypad to Arduino
-byte colPins[COLS] = {3, 2, 1, 0}; // connect columns from keypad to Arduino
+byte reihenPins[REIHEN] = {7 ,6 ,5 ,4}; 
+byte spaltenPins[SPALTEN] = {3, 2, 1, 0}; 
 
-Keypad customKeypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS); // class Keypad instance initialization
+Keypad eigenesZeichenPad = Keypad( makeKeymap(zahlen), reihenPins, spaltenPins, REIHEN, SPALTEN); 
 
+// Methode für das Setup 
 void setup(){
   lcd.begin(16,2);
   lcd.setCursor(5,0);
@@ -31,109 +33,110 @@ void setup(){
   delay(3000);
   lcd.begin(16,2);
   lcd.setCursor(0,0);
-  lcd.print("Baisc Calculator");
+  lcd.print("Basic Calculator");
   lcd.setCursor(4,1);
   lcd.print("Arduino");
   delay(2000);
-  lcd.clear(); //clears the LCD screen and positions the cursor in the upper-left corner. 
+  lcd.clear(); 
 }
 void loop()
 {
-  customKey = customKeypad.getKey();
-  switch(customKey) 
+  zeichen = eigenesZeichenPad.getKey();
+  switch(zeichen) 
   {
-  case '0' ... '9': // get first value for calculation
+// Bei Auswahl der Zahlen
+  case '0' ... '9': 
     lcd.setCursor(0,0);
-    first = first * 10 + (customKey - '0');
-    lcd.print(first);
+    erste = erste * 10 + (zeichen - '0');
+    lcd.print(erste);
     posit++;
     break;
-
+//Bei Addition
   case '+':
-    first = (total != 0 ? total : first);
+    erste = (total != 0 ? total : erste);
     lcd.setCursor(posit,0);
     lcd.print("+");
     posit++;
-    second = SecondNumber(); // get second number
-    total = first + second;
+    zweite = ZweiteNummer(); 
+    total = erste + zweite;
     lcd.setCursor(1,1);
     lcd.print(total);
-    first = 0, second = 0; // reset the values
+    erste = 0, zweite = 0; 
     posit=0;
     break;
-
+// Bei Subtraktion
   case '-':
-    first = (total != 0 ? total : first);
+    erste = (total != 0 ? total : erste);
     lcd.setCursor(posit,0);
     lcd.print("-");
     posit++;
-    second = SecondNumber();
-    total = first - second;
+    zweite = ZweiteNummer();
+    total = erste - zweite;
     lcd.setCursor(1,1);
     lcd.print(total);
-    first = 0, second = 0;
+    erste = 0, zweite = 0;
     posit=0;
     break;
-
+// Bei Multiplikation
   case '*':
-    first = (total != 0 ? total : first);
+    erste = (total != 0 ? total : erste);
     lcd.setCursor(posit,0);
     lcd.print("*");
     posit++;
-    second = SecondNumber();
-    total = first * second;
+    zweite = ZweiteNummer();
+    total = erste * zweite;
     lcd.setCursor(1,1);
     lcd.print(total);
-    first = 0, second = 0;
+    erste = 0, zweite = 0;
     posit=0;
     break;
-
+// Bei Division
   case '/':
-    first = (total != 0 ? total : first);
+    erste = (total != 0 ? total : erste);
     lcd.setCursor(posit,0);
     lcd.print("/");
     posit++;
-    second = SecondNumber();
+    zweite = ZweiteNummer();
     lcd.setCursor(1,1);
 
-    second == 0 ? lcd.print("Error") : total = (float)first / (float)second;
+    zweite == 0 ? lcd.print("Error") : total = (float)erste / (float)zweite;
 
     lcd.print(total);
-    first = 0, second = 0;
+    erste = 0, zweite = 0;
     posit=0;
     break;
-
+// wenn alles resettet
   case 'C':
     total = 0;
-    first = 0;
-    second = 0;
+    erste = 0;
+    zweite = 0;
     posit = 0;
     lcd.clear();
     break;
   }
 }
-
-long SecondNumber()
+// Eingabe der 2. Nummer
+long ZweiteNummer()
 {
   while( 1 )
   {
-    customKey = customKeypad.getKey();
-    if(customKey >= '0' && customKey <= '9')
+    zeichen = eigenesZeichenPad.getKey();
+    if(zeichen >= '0' && zeichen <= '9')
     {
-      second = second * 10 + (customKey - '0');
+      zweite = zweite * 10 + (zeichen - '0');
       lcd.setCursor(posit,0);
-      lcd.print(second);
+      lcd.print(zweite);
     }
-    if(customKey == 'C') {
+    if(zeichen == 'C') {
       total = 0;
-      first = 0;
-      second = 0;
+      erste = 0;
+      zweite = 0;
       posit = 0;
       lcd.clear();
       break;
     }
 
-    if(customKey == '='){
+    if(zeichen == '='){
       lcd.setCursor(0,1);
           lcd.print("=");
       
@@ -144,4 +147,4 @@ long SecondNumber()
       break;
     }
   }
- return second;} 
+ return zweite;} 
