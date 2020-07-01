@@ -26,15 +26,15 @@ Keypad eigenesZeichenPad = Keypad( makeKeymap(zahlen), reihenPins, spaltenPins, 
 // Methode für das Setup 
 void setup(){
   lcd.begin(16,2);
-  lcd.setCursor(5,0);
-  lcd.print("Alkitab");
-  lcd.setCursor(3,1);
-  lcd.print("University");
+  lcd.setCursor(7,0);
+  lcd.print("Im");
+  lcd.setCursor(6,1);
+  lcd.print("Dauti");
   delay(3000);
   lcd.begin(16,2);
-  lcd.setCursor(0,0);
-  lcd.print("Basic Calculator");
-  lcd.setCursor(4,1);
+  lcd.setCursor(3,0);
+  lcd.print("Calculator");
+  lcd.setCursor(5,1);
   lcd.print("Arduino");
   delay(2000);
   lcd.clear(); 
@@ -147,4 +147,5 @@ long ZweiteNummer()
       break;
     }
   }
- return zweite;} 
+ return zweite;
+} 
