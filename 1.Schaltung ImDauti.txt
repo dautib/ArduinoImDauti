@@ -1,15 +1,15 @@
-// KFZ-Ampel
-int kfz_rot   = 12;            // Pin-Nr. der roten KFZ-LED
-int kfz_gelb  = 11;            // Pin-Nr. der gelben KFZ-LED
-int kfz_gruen = 10;            // Pin-Nr. der gruenen KFZ-LED
+// Auto-Ampel LED's
+int kfz_rot   = 12;            
+int kfz_gelb  = 11;            
+int kfz_gruen = 10;            
 
-// Fussgaenger-Ampel
-int fg_rot    = 9;             // Pin-Nr. der roten Fussgaenger-LED
-int fg_gruen  = 8;             // Pin-Nr. der gruenen Fussgaenger-LED
+// Fussgaenger-Ampel LED's
+int fg_rot    = 9;             
+int fg_gruen  = 8;             
 
-// Taste
-int taste     = 2;             // Pin-Nr. Taster
-int taste_led = 7;             // Pin-Nr. der Taster-LED
+// Taste und blaues Licht
+int taste     = 2;             
+int taste_led = 7;             
 
 void setup() {
   pinMode(kfz_rot, OUTPUT);
@@ -24,7 +24,7 @@ void setup() {
 }
 
 void loop() {
-  //KFZ-Ampel auf Gruen schalten
+  //Auto-Ampel auf Gruen schalten
   digitalWrite(kfz_rot, LOW);
   digitalWrite(kfz_gelb, LOW);
   digitalWrite(kfz_gruen, HIGH);
@@ -34,14 +34,14 @@ void loop() {
   digitalWrite(fg_rot, HIGH);
       
   if(digitalRead(taste) == LOW){
-    //Signalgeber Fussgaengerschaltung aktiviert
+    //Signalgeber Fussgaenger fuer Blinde
     for(int i=0; i<5; i++){
       digitalWrite(taste_led, HIGH);
       delay(500);
       digitalWrite(taste_led, LOW);
       delay(500);
     }
-    //KFZ-Ampel auf Rot schalten
+    //Auto-Ampel auf Rot schalten
     digitalWrite(kfz_gruen, LOW);
     digitalWrite(kfz_gelb, HIGH);
     delay(2000);
